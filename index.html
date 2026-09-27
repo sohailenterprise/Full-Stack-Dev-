@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Result System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        input {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 6px 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Student Result Management System</h1>
+<label>Student Name:</label>
+<input type="text" id="name">
+
+<br>
+
+<label>Image URL:</label>
+<input type="text" id="image">
+
+<h3>Subjects</h3>
+
+<div id="subjects">
+
+    <div>
+        Mathematics:
+        <input type="number" class="mark" data-subject="Mathematics">
+        <button onclick="removeSubject(this)">Remove</button>
+    </div>
+
+    <div>
+        English:
+        <input type="number" class="mark" data-subject="English">
+        <button onclick="removeSubject(this)">Remove</button>
+    </div>
+
+    <div>
+        Programming:
+        <input type="number" class="mark" data-subject="Programming">
+        <button onclick="removeSubject(this)">Remove</button>
+    </div>
+
+</div>
+
+<br>
+
+<button onclick="addSubject()">Add Subject</button>
+
+<button onclick="addStudent()">Add Student</button>
+<h2>Student Results</h2>
+
+<table id="result">
+    <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Subjects</th>
+        <th>Total</th>
+        <th>Percentage</th>
+        <th>Grade</th>
+        <th>Action</th>
+    </tr>
+</table>
+<script>
+
+function addSubject() {
+
+    let name = prompt("Enter subject name:");
+
+    if (name == "") {
+        return;
+    }
+
+    let div = document.createElement("div");
+
+    div.innerHTML =
+        name +
+        ': <input type="number" class="mark" data-subject="' +
+        name +
+        '">' +
+        ' <button onclick="removeSubject(this)">Remove</button>';
+
+    document.getElementById("subjects").appendChild(div);
+}
+
+
+function removeSubject(button) {
+
+    button.parentElement.remove();
+
+}
+
+
+function addStudent() {
+
+    let name = document.getElementById("name").value;
+
+    let image = document.getElementById("image").value;
+
+    let marks = document.querySelectorAll(".mark");
+
+    let total = 0;
+
+    let subjectText = "";
+
+
+    for (let i = 0; i < marks.length; i++) {
+
+        let mark = Number(marks[i].value);
+
+        total = total + mark;
+
+        subjectText =
+            subjectText +
+            marks[i].dataset.subject +
+            ": " +
+            mark +
+            "<br>";
+    }
+
+    let percentage = total / marks.length;
+
+    let grade;
+
+    if (percentage >= 90) {
+        grade = "A+";
+    }
+    else if (percentage >= 80) {
+        grade = "A";
+    }
+    else if (percentage >= 70) {
+        grade = "B";
+    }
+    else if (percentage >= 60) {
+        grade = "C";
+    }
+    else if (percentage >= 50) {
+        grade = "D";
+    }
+    else {
+        grade = "F";
+    }
+
+
+    let table = document.getElementById("result");
+
+    let row = table.insertRow();
+
+    row.innerHTML =
+        '<td><img src="' + image + '"></td>' +
+        '<td>' + name + '</td>' +
+        '<td>' + subjectText + '</td>' +
+        '<td>' + total + '</td>' +
+        '<td>' + percentage.toFixed(2) + '%</td>' +
+        '<td>' + grade + '</td>' +
+        '<td><button onclick="deleteStudent(this)">Delete</button></td>';
+}
+
+function deleteStudent(button) {
+
+    button.parentElement.parentElement.remove();
+
+}
+</script>
+
+</body>
+</html>
